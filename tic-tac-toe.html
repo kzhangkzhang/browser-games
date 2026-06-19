@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tic Tac Toe</title>
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    background: #1e1e2e;
+    color: #eee;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    gap: 16px;
+  }
+  h1 { margin-bottom: 0; }
+  #status { font-size: 1.2rem; min-height: 1.5em; }
+  #board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 100px);
+    gap: 6px;
+  }
+  .cell {
+    background: #2a2a3d;
+    border: none;
+    border-radius: 8px;
+    font-size: 3rem;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+  .cell:hover:not(:disabled) { background: #3a3a55; }
+  .cell:disabled { cursor: default; }
+  .cell.x { color: #6ec6ff; }
+  .cell.o { color: #ff8a8a; }
+  .cell.win { background: #3d6b3d; }
+  #reset {
+    padding: 8px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 6px;
+    background: #6ec6ff;
+    color: #1e1e2e;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  #reset:hover { background: #8fd3ff; }
+</style>
+</head>
+<body>
+  <h1>Tic Tac Toe</h1>
+  <div id="status"></div>
+  <div id="board"></div>
+  <button id="reset">New Game</button>
+
+<script>
+const WIN_LINES = [
+  [0,1,2],[3,4,5],[6,7,8],
+  [0,3,6],[1,4,7],[2,5,8],
+  [0,4,8],[2,4,6]
+];
+
+let board = Array(9).fill(null);
+let current = 'X';
+let gameOver = false;
+
+const boardEl = document.getElementById('board');
+const statusEl = document.getElementById('status');
+const cells = [];
+
+for (let i = 0; i < 9; i++) {
+  const btn = document.createElement('button');
+  btn.className = 'cell';
+  btn.addEventListener('click', () => makeMove(i));
+  boardEl.appendChild(btn);
+  cells.push(btn);
+}
+
+document.getElementById('reset').addEventListener('click', resetGame);
+
+function makeMove(i) {
+  if (gameOver || board[i]) return;
+  board[i] = current;
+  render();
+  const result = checkWinner();
+  if (result) {
+    gameOver = true;
+    if (result.winner) {
+      statusEl.textContent = `${result.winner} wins!`;
+      result.line.forEach(idx => cells[idx].classList.add('win'));
+    } else {
+      statusEl.textContent = "It's a draw!";
+    }
+    return;
+  }
+  current = current === 'X' ? 'O' : 'X';
+  statusEl.textContent = `${current}'s turn`;
+}
+
+function checkWinner() {
+  for (const line of WIN_LINES) {
+    const [a, b, c] = line;
+    if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+      return { winner: board[a], line };
+    }
+  }
+  if (board.every(cell => cell)) return { winner: null, line: [] };
+  return null;
+}
+
+function render() {
+  cells.forEach((cell, i) => {
+    cell.textContent = board[i] || '';
+    cell.disabled = !!board[i];
+    cell.classList.remove('x', 'o');
+    if (board[i] === 'X') cell.classList.add('x');
+    if (board[i] === 'O') cell.classList.add('o');
+  });
+}
+
+function resetGame() {
+  board = Array(9).fill(null);
+  current = 'X';
+  gameOver = false;
+  cells.forEach(cell => cell.classList.remove('win'));
+  render();
+  statusEl.textContent = `${current}'s turn`;
+}
+
+resetGame();
+</script>
+</body>
+</html>
