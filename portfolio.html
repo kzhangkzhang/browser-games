@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kevin.AI</title>
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg-alt: #11131a;
+    --accent: #5eb1ff;
+    --accent-dim: #2f5d82;
+    --text: #e6e6ea;
+    --text-dim: #9a9aa5;
+    --border: #1f2230;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+  }
+
+  .mono {
+    font-family: "Consolas", "SFMono-Regular", Menlo, monospace;
+  }
+
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: rgba(10, 10, 15, 0.85);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  nav .logo {
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  nav a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+  }
+
+  nav a:hover { color: var(--accent); }
+
+  section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 5rem 1.5rem;
+  }
+
+  .hero {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    background:
+      radial-gradient(circle at 50% 20%, rgba(94, 177, 255, 0.12), transparent 60%);
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    margin: 0;
+    color: var(--text);
+  }
+
+  .hero h1 .ai {
+    color: var(--accent);
+  }
+
+  .hero p.tagline {
+    color: var(--text-dim);
+    font-size: 1.2rem;
+    margin-top: 1rem;
+  }
+
+  .scroll-cue {
+    margin-top: 3rem;
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); opacity: 0.6; }
+    50% { transform: translateY(6px); opacity: 1; }
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    color: var(--text);
+    border-left: 3px solid var(--accent);
+    padding-left: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .bio {
+    color: var(--text-dim);
+    margin-bottom: 2.5rem;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+
+  .skill-card {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.1rem 1.2rem;
+  }
+
+  .skill-card h3 {
+    margin: 0 0 0.5rem;
+    font-size: 0.95rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .skill-card p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-dim);
+  }
+
+  .traits {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .traits li {
+    padding-left: 1.3rem;
+    position: relative;
+    color: var(--text-dim);
+  }
+
+  .traits li::before {
+    content: "▹";
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+  }
+
+  .traits strong { color: var(--text); }
+
+  .timeline {
+    border-left: 2px solid var(--border);
+    padding-left: 1.5rem;
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .job {
+    position: relative;
+  }
+
+  .job::before {
+    content: "";
+    position: absolute;
+    left: -1.56rem;
+    top: 0.3rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  .job h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--text);
+  }
+
+  .job .meta {
+    color: var(--accent-dim);
+    font-size: 0.85rem;
+    margin: 0.2rem 0 0.7rem;
+  }
+
+  .job ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: var(--text-dim);
+  }
+
+  .job li { margin-bottom: 0.4rem; }
+
+  footer {
+    text-align: center;
+    padding: 3rem 1.5rem 4rem;
+    color: var(--text-dim);
+    border-top: 1px solid var(--border);
+  }
+
+  footer .links {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo mono">Kevin.AI</div>
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="home" class="hero">
+  <h1>Kevin<span class="ai">.AI</span></h1>
+  <p class="tagline">Building enterprise systems with two decades of Oracle, big data, and full-stack craftsmanship.</p>
+  <div class="scroll-cue mono">↓ scroll</div>
+</section>
+
+<section id="about">
+  <h2 class="fade-in">About</h2>
+  <p class="bio fade-in">
+    I'm Kevin Zhang, a Senior Application Technical Lead &amp; Solution Architect with 20+ years at Knowles
+    Corporation. I specialize in Oracle APEX and Oracle EBS, and have led big-data initiatives bringing
+    predictive analytics to manufacturing. Self-taught in modern web technology, I enjoy bridging the gap
+    between business needs and technical execution.
+  </p>
+
+  <div class="skills-grid fade-in">
+    <div class="skill-card">
+      <h3>Oracle Platform</h3>
+      <p>APEX (4.x/5.x/19.x), Oracle EBS R12/11i (Finance, Discrete &amp; OPM Mfg, HR, Order-to-Cash, Procure-to-Pay), OCI</p>
+    </div>
+    <div class="skill-card">
+      <h3>Big Data &amp; Analytics</h3>
+      <p>Cloudera CDH5.x, Hadoop, Hive, Sqoop, Apache Airflow, Apache Nifi, Anaconda/Python, cx_Oracle, R</p>
+    </div>
+    <div class="skill-card">
+      <h3>Web</h3>
+      <p>HTML5, CSS3, jQuery, AJAX</p>
+    </div>
+    <div class="skill-card">
+      <h3>BI</h3>
+      <p>IBM Cognos BI v8.4.1, OBIEE, Oracle HCM, Demantra</p>
+    </div>
+    <div class="skill-card">
+      <h3>Tools</h3>
+      <p>VSCode, Git/GitHub, Git Bash, Cygwin, Cmder, Windows Terminal, Oracle VM, Unix/Shell scripting</p>
+    </div>
+    <div class="skill-card">
+      <h3>Integration</h3>
+      <p>B2B (E2Open, sFTP), application &amp; cloud integration architecture</p>
+    </div>
+  </div>
+
+  <h2 class="fade-in">Why work with me</h2>
+  <ul class="traits fade-in">
+    <li><strong>Self-taught and fast learner</strong> — picked up modern web/mobile and big data stacks without formal training</li>
+    <li><strong>Technical mentor</strong> — leads and mentors offshore development teams, the "go-to" person for the team</li>
+    <li><strong>Bridges silos</strong> — works across dev, DBA, and functional/business teams as the connective technical lead</li>
+    <li><strong>Process-driven</strong> — defined SDLC and contributed the majority of the team's coding framework</li>
+    <li><strong>Delivery track record</strong> — led multiple EBS version upgrades, M&amp;A integrations, and ITAR compliance implementation</li>
+    <li><strong>Curious and forward-looking</strong> — proactively explores new tech, from OCI to predictive analytics for "smart manufacturing"</li>
+  </ul>
+</section>
+
+<section id="experience">
+  <h2 class="fade-in">Experience</h2>
+  <div class="timeline fade-in">
+
+    <div class="job">
+      <h3>Application Development Manager</h3>
+      <p class="meta mono">Knowles Corporation · Jan 2026 – Present</p>
+      <ul>
+        <li>Recently promoted into management, overseeing application development direction at Knowles Corporation</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <h3>Sr. Application Technical Lead &amp; Solution Architect</h3>
+      <p class="meta mono">Knowles Corporation · Jun 2014 – Jan 2026 · 11 yr 8 mo</p>
+      <ul>
+        <li>Designed and built 13+ business-critical internal web applications using Oracle APEX (4.x/5.x/19.x), HTML5, CSS3, jQuery, and AJAX, integrated with the EBS workflow engine and BlackBerry Access secure browser container</li>
+        <li>Led a big-data initiative converting manufacturing to "smart" manufacturing using Cloudera BDA (Hadoop, Hive, Sqoop, Airflow, Nifi, Python, R) for predictive analytics</li>
+        <li>Technically led and mentored an offshore Oracle ERP (R12) development team; defined SDLC and authored ~60% of the team's shared coding framework</li>
+        <li>Designed and managed Oracle EBS upgrades (11.5.10 → 12.1.3 → R12.2)</li>
+        <li>Led ITAR compliance implementation and EBS rollouts for acquired and divested business units</li>
+        <li>Built B2B integrations with customers/suppliers (E2Open, sFTP) and cross-application/cloud integration architecture</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <h3>Oracle Apps Technical Lead</h3>
+      <p class="meta mono">Knowles Corporation · Feb 2012 – Jun 2014 · 2 yr 5 mo</p>
+      <ul>
+        <li>Investigated and advocated new technology solutions, defining team standards</li>
+        <li>Served as primary technical gateway between developer, DBA, and functional teams</li>
+        <li>Lead developer/system analyst for Manufacturing, Finance, and HRMS modules on Oracle EBS 11i (11.5.8–11.5.10) and IBM Cognos v8.4.1</li>
+        <li>Coached the global development team on SDLC, coding standards, performance tuning, and integration architecture</li>
+      </ul>
+    </div>
+
+    <div class="job">
+      <h3>Sr. Programmer/Business Analyst</h3>
+      <p class="meta mono">Knowles Corporation · Jun 2006 – Feb 2012 · 5 yr 9 mo</p>
+      <ul>
+        <li>Technical/architecture lead across Oracle EBS R12/11i (OPM Mfg, Discrete Mfg, Finance, HR, SOA, B2B, APEX)</li>
+        <li>Worked with IBM Cognos BI v8.4.1 and Oracle APEX</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<footer id="contact">
+  <p class="mono">Let's connect.</p>
+  <div class="links">
+    <a href="https://www.linkedin.com/in/kevin-zhang-apex-ebs-bigdata/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="mailto:your-email@example.com">Email</a>
+  </div>
+</footer>
+
+<script>
+  const fadeEls = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+  fadeEls.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
